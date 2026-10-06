@@ -8,7 +8,7 @@ namespace WebApplication1.Controllers
     {
         private static List<Player> players = new List<Player>
         {
-            new Player { Id = 1, Name = "Ana"}
+            new Player { Id = 1, Name = "Ana", Position = "Outside", CurrentClub = "Porto"}
         };
 
         [HttpGet]        
@@ -29,12 +29,45 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            return Ok(players[id]);
+            return Ok(player);
         }
+
+        [HttpGet("filter")]
+        public IActionResult GetByFilter([FromQuery] string? name, [FromQuery] string? position, [FromQuery] string? currentClub)
+        {
+            IEnumerable<Player> foundPlayers = players;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                foundPlayers = foundPlayers.Where(p => p.Name == name);
+            }
+            
+            if (!string.IsNullOrEmpty(position))
+            {
+                foundPlayers = foundPlayers.Where(p => p.Position == position);
+            }
+
+            if (!string.IsNullOrEmpty(currentClub))
+            {
+                foundPlayers = foundPlayers.Where(p => p.CurrentClub == currentClub);
+            }
+
+            if(!foundPlayers.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(foundPlayers);
+        }
+
 
         [HttpPost]
         public IActionResult Create([FromBody] Player player)
         {
+            if (players.Any(p => p.Id == player.Id))
+            {
+                return Conflict("Id already exists!");
+            }
             players.Add(player);
             return Ok(players);
         }
