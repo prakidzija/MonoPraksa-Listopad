@@ -43,7 +43,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("filter")]
-        public IActionResult GetByFilter([FromQuery] string? name, [FromQuery] string? position, [FromQuery] string? currentClub)
+        public IActionResult GetByFilter([FromQuery] string? name, [FromQuery] string? position, [FromQuery] string? currentClub, [FromQuery] string? sortBy)
         {
             IEnumerable<Player> foundPlayers = players;
 
@@ -65,6 +65,23 @@ namespace WebApplication1.Controllers
             if(!foundPlayers.Any())
             {
                 return NotFound();
+            }
+
+            if (sortBy == "id")
+            {
+                foundPlayers = foundPlayers.OrderBy(p => p.Id);
+            }
+            else if (sortBy == "name")
+            {
+                foundPlayers = foundPlayers.OrderBy(p => p.Name);
+            }
+            else if (sortBy == "position")
+            {
+                foundPlayers = foundPlayers.OrderBy(p => p.Position);
+            }
+            else if (sortBy == "currentClub")
+            {
+                foundPlayers = foundPlayers.OrderBy(p => p.CurrentClub);
             }
 
             return Ok(foundPlayers);
