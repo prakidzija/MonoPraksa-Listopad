@@ -8,7 +8,17 @@ namespace WebApplication1.Controllers
     {
         private static List<Player> players = new List<Player>
         {
-            new Player { Id = 1, Name = "Ana", Position = "Outside", CurrentClub = "Porto"}
+            new Player { Id = 1, Name = "Ana", Position = "Outside", CurrentClub = "Porto"},
+            new Player { Id = 2, Name = "Lana", Position = "Opposite", CurrentClub = "Porto"},
+            new Player { Id = 3, Name = "Mina", Position = "Setter", CurrentClub = "Porto"},
+            new Player { Id = 4, Name = "Leona", Position = "Outside", CurrentClub = "Porto"},
+            new Player { Id = 5, Name = "Diana", Position = "Setter", CurrentClub = "Porto"},
+            new Player { Id = 6, Name = "Lu", Position = "Libero", CurrentClub = "Porto"},
+            new Player { Id = 7, Name = "Enea", Position = "Outside", CurrentClub = "Chelto"},
+            new Player { Id = 8, Name = "Rona", Position = "Opposite", CurrentClub = "Chelto"},
+            new Player { Id = 9, Name = "Zena", Position = "Setter", CurrentClub = "Chelto"},
+            new Player { Id = 10, Name = "Emina", Position = "Outside", CurrentClub = "Lisbin"},
+            new Player { Id = 11, Name = "Tia", Position = "Libero", CurrentClub = "Lisbin"}
         };
 
         [HttpGet]        
@@ -83,6 +93,8 @@ namespace WebApplication1.Controllers
             }
 
             player.Name = updatePlayer.Name;
+            player.Position = updatePlayer.Position;
+            player.CurrentClub = updatePlayer.CurrentClub;
 
             return Ok(player);
         }
