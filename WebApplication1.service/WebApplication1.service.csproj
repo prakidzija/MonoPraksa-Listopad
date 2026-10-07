@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebApplication1.model\WebApplication1.model.csproj" />
+    <ProjectReference Include="..\WebApplication1.repository\WebApplication1.repository.csproj" />
+  </ItemGroup>
+
+</Project>
