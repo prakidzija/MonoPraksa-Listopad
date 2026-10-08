@@ -37,6 +37,8 @@ add column adress varchar(40) not null;
 alter table players
 alter column name set not null;
 
+create index idx_registrations_player_id on player_registrations(player_id);
+create index idx_registrations_club_id on player_registrations(club_id);
 
 insert into clubs (name, adress) values
 	('Porto', 'Porto Street 5'),
@@ -106,41 +108,45 @@ insert into player_registrations (player_id, club_id, registration_type, jersey_
 
 select * from player_registrations;
 
-select players.name, clubs.name, player_registrations.registration_type
-from players
-inner join player_registrations
-	on players.id = player_registrations.player_id
-inner join clubs
-	on player_registrations.club_id = clubs.id
-order by clubs.id;
-
-
 select * from players;
 select * from players where players.id = 'd55d94f5-ca51-41a2-adca-ed24d10ef4c5';
 
 update players set age = 20 where id = 'd55d94f5-ca51-41a2-adca-ed24d10ef4c5';
 select * from players where id = 'd55d94f5-ca51-41a2-adca-ed24d10ef4c5';
 
+update players set club_id = null where id = 'f02a0bbb-6a67-4884-87c2-61f3e69128ab';
+
 delete from players where id = 'd55d94f5-ca51-41a2-adca-ed24d10ef4c5';
 select * from players order by id;
 
 
-update players set club_id = null where id = 'f02a0bbb-6a67-4884-87c2-61f3e69128ab';
+select players.name, clubs.name, player_registrations.registration_type
+from players
+left join player_registrations
+	on players.id = player_registrations.player_id
+left join clubs
+	on player_registrations.club_id = clubs.id
+order by clubs.id;
 
-select players.name, players.position, clubs.name from players
-inner join clubs on players.club_id = clubs.id;
 
-select players.name, players.position, clubs.name from players
-left join clubs on players.club_id = clubs.id;
+
+
+
 
 select clubs.name, players.position, count(*)
-from players inner join clubs on players.club_id = clubs.id
+from players 
+inner join player_registrations 
+	on players.id = player_registrations.player_id
+inner join clubs 
+	on player_registrations.club_id = clubs.id
 group by clubs.id, players.position
 order by clubs.id, players.position;
 
 drop table clubs;
 drop table players;
 drop table player_registrations;
+
+delete * from player_registrations;
 
 
 
