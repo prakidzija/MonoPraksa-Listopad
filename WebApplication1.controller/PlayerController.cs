@@ -15,63 +15,90 @@ namespace WebApplication1.controller
             _playerService = playerService;
         }
 
-        [HttpGet]        
-        public IActionResult GetAll()
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
         {
-            return Ok(_playerService.GetAll());
+            var players = await _playerService.GetAllAsync();
+
+            return Ok(players);
+        }
+
+        [HttpGet("player")]
+        public async Task<IActionResult> GetAllPlayers()
+        {
+            var players = await _playerService.GetAllPlayers();
+            return Ok(players);
+        }
+
+        [HttpGet("club")]
+        public async Task<IActionResult> GetAllClubs()
+        {
+            var clubs = await _playerService.GetAllClubs();
+            return Ok(clubs);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            Player? player = _playerService.GetById(id);
+            Player? player = await _playerService.GetByIdAsync(id);
+
             if (player == null)
             {
                 return NotFound();
             }
+
             return Ok(player);
         }
 
         [HttpGet("filter")]
-        public IActionResult GetByFilter([FromQuery] string? name, [FromQuery] string? position, [FromQuery] string? currentClub)
+        public async Task<IActionResult> GetByFilterAsync(
+            [FromQuery] string? name,
+            [FromQuery] string? position,
+            [FromQuery] string? currentClub)
         {
-            var players = _playerService.GetByFilter(name, position, currentClub);
+            var players = await _playerService.GetByFilterAsync(
+                name,
+                position,
+                currentClub);
 
             return Ok(players);
         }
-    
-        [HttpPost]
 
-        public IActionResult Create([FromBody] Player player)
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync(
+            [FromBody] Player player)
         {
-            bool created = _playerService.Create(player);
+            bool created = await _playerService.CreateAsync(player);
 
             if (!created)
-                {
-                    return Conflict("Player with this Id already exists!");
-                }
+            {
+                return Conflict();
+            }
+
             return Ok(player);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Player updatePlayer)
+        public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Player updatedPlayer)
         {
-            bool updated = _playerService.Update(id, updatePlayer);
+            bool updated = await _playerService.UpdateAsync(
+                id,
+                updatedPlayer);
 
             if (!updated)
             {
                 return NotFound();
             }
 
-            return Ok(updatePlayer);
+            return Ok(updatedPlayer);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            bool deleted = _playerService.Delete(id);
+            bool deleted = await _playerService.DeleteAsync(id);
 
-            if(!deleted)
+            if (!deleted)
             {
                 return NotFound();
             }

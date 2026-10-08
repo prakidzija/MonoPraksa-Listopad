@@ -3,22 +3,28 @@ using WebApplication1.repository;
 
 namespace WebApplication1.service
 {
-
     public interface IPlayerService
     {
-        IEnumerable<Player> GetAll();
-        Player? GetById(int id);
+        Task<List<Player>> GetAllAsync();
+        Task<List<Player>> GetAllPlayers();
+        Task<List<Club>> GetAllClubs();
 
-        IEnumerable<Player> GetByFilter(
+        Task<Player?> GetByIdAsync(Guid id);
+
+        Task<List<Player>> GetByFilterAsync(
             string? name,
             string? position,
             string? currentClub
-            );
+        );
 
-        bool Create(Player player);
-        bool Update(int id, Player updatedPlayer);
-        bool Delete(int id);
+        Task<bool> CreateAsync(Player player);
+
+        Task<bool> UpdateAsync(Guid id, Player updatedPlayer);
+
+        Task<bool> DeleteAsync(Guid id);
     }
+
+
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerRepository _repository;
@@ -28,52 +34,77 @@ namespace WebApplication1.service
             _repository = repository;
         }
 
-        public IEnumerable<Player> GetAll()
+
+        public async Task<List<Player>> GetAllAsync()
         {
-            return _repository.GetAll();
+            return await _repository.GetAllAsync();
         }
 
-        public Player? GetById(int id)
+        public async Task<List<Player>> GetAllPlayers()
         {
-            return _repository.GetById(id);
+            return await _repository.GetAllPlayers();
         }
 
-        public IEnumerable<Player> GetByFilter(string? name, string? position, string? currentClub)
+        public async Task<List<Club>> GetAllClubs()
         {
-            IEnumerable<Player> foundPlayers = _repository.GetAll();
+            return await _repository.GetAllClubs();
+        }
+
+
+        public async Task<Player?> GetByIdAsync(Guid id)
+        {
+            return await _repository.GetByIdAsync(id);
+        }
+
+
+        public async Task<List<Player>> GetByFilterAsync(
+            string? name,
+            string? position,
+            string? currentClub)
+        {
+            IEnumerable<Player> foundPlayers =
+                await _repository.GetAllAsync();
 
             if (!string.IsNullOrEmpty(name))
             {
-                foundPlayers = foundPlayers.Where(p => p.Name == name);
+                foundPlayers = foundPlayers
+                    .Where(p => p.Name == name);
             }
 
             if (!string.IsNullOrEmpty(position))
             {
-                foundPlayers = foundPlayers.Where(p => p.Position == position);
+                foundPlayers = foundPlayers
+                    .Where(p => p.Position == position);
             }
 
             if (!string.IsNullOrEmpty(currentClub))
             {
-                foundPlayers = foundPlayers.Where(p => p.CurrentClub == currentClub);
+                foundPlayers = foundPlayers.Where(p =>
+                    p.PlayerRegistrations.Any(r =>
+                        r.Club != null &&
+                        r.Club.Name == currentClub
+                    )
+                );
             }
 
-            return foundPlayers;
+            return foundPlayers.ToList();
         }
 
-        public bool Create(Player player)
-        {
-            if (_repository.GetById(player.Id) != null)
-            {
-                return false;
-            }
 
-            _repository.Add(player);
+        public async Task<bool> CreateAsync(Player player)
+        {
+            await _repository.AddAsync(player);
+
             return true;
         }
 
-        public bool Update(int id, Player updatedPlayer)
+
+        public async Task<bool> UpdateAsync(
+            Guid id,
+            Player updatedPlayer)
         {
-            Player? player = _repository.GetById(id);
+            Player? player =
+                await _repository.GetByIdAsync(id);
 
             if (player == null)
             {
@@ -82,23 +113,25 @@ namespace WebApplication1.service
 
             player.Name = updatedPlayer.Name;
             player.Position = updatedPlayer.Position;
-            player.CurrentClub = updatedPlayer.CurrentClub;
+            player.Age = updatedPlayer.Age;
 
-            _repository.Update(player);
+            await _repository.UpdateAsync(player);
 
             return true;
         }
 
-        public bool Delete(int id)
+
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            Player? player = _repository.GetById(id);
+            Player? player =
+                await _repository.GetByIdAsync(id);
 
             if (player == null)
             {
                 return false;
             }
 
-            _repository.Delete(player);
+            await _repository.DeleteAsync(player);
 
             return true;
         }

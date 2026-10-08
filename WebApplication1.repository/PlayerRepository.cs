@@ -1,95 +1,70 @@
-﻿using System;
-using System.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using WebApplication1.model;
-
 
 namespace WebApplication1.repository
 {
     public interface IPlayerRepository
     {
-        IEnumerable<Player> GetAll();
-        Player? GetById(int id);
-        void Add(Player player);
-        void Update(Player player);
-        void Delete(Player player);
+        Task<List<Player>> GetAllAsync();
+        Task<List<Player>> GetAllPlayers();
+        Task<List<Club>> GetAllClubs();
+        Task<Player?> GetByIdAsync(Guid id);
+        Task AddAsync(Player player);
+        Task UpdateAsync(Player player);
+        Task DeleteAsync(Player player);
     }
 
     public class PlayerRepository : IPlayerRepository
     {
-        private readonly List<Player> players = new()
+        private readonly PraksaDbContext _context;
+
+        public PlayerRepository(PraksaDbContext context)
         {
-            new Player
-            {
-                Id = 1,
-                Name = "Ana",
-                Position = "Outside",
-                CurrentClub = "Porto"
-            },
-
-            new Player
-            {
-                Id = 2,
-                Name = "Luna",
-                Position = "Opposite",
-                CurrentClub = "Porto"
-            },
-
-            new Player
-            {
-                Id = 3,
-                Name = "Tara",
-                Position = "Setter",
-                CurrentClub = "Porto"
-            },
-
-            new Player
-            {
-                Id = 4,
-                Name = "Mina",
-                Position = "Libero",
-                CurrentClub = "Porto"
-            },
-
-            new Player
-            {
-                Id = 5,
-                Name = "Liana",
-                Position = "Outside",
-                CurrentClub = "Chervas"
-            },
-
-            new Player
-            {
-                Id = 6,
-                Name = "Rene",
-                Position = "Libero",
-                CurrentClub = "Chervas"
-            }
-        };
-
-        public IEnumerable<Player> GetAll()
-        {
-            return players;
+            _context = context;
         }
 
-        public Player? GetById(int id)
+        public async Task<List<Player>> GetAllAsync()
         {
-            return players.FirstOrDefault(p => p.Id == id);
+            return await _context.Players
+                .Include(p => p.PlayerRegistrations)
+                .ThenInclude(r => r.Club)
+                .ToListAsync();
         }
 
-        public void Add(Player player)
+        public async Task<List<Player>> GetAllPlayers()
         {
-            players.Add(player);
+            return await _context.Players.ToListAsync();
         }
 
-        public void Update(Player player)
+        public async Task<List<Club>> GetAllClubs()
         {
-            
+            return await _context.Clubs.ToListAsync();
         }
 
-        public void Delete(Player player)
+        public async Task<Player?> GetByIdAsync(Guid id)
         {
-            players.Remove(player);
+            return await _context.Players
+                .Include(p => p.PlayerRegistrations)
+                .ThenInclude(r => r.Club)
+                .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task AddAsync(Player player)
+        {
+            await _context.Players.AddAsync(player);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Player player)
+        {
+            _context.Players.Update(player);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Player player)
+        {
+            _context.Players.Remove(player);
+            await _context.SaveChangesAsync();
         }
     }
 }
