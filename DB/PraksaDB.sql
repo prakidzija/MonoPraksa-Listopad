@@ -99,6 +99,97 @@ insert into player_registrations (player_id, club_id, registration_type, jersey_
 	'2026-10-03'
 ),
 (
+	'4d4480ec-49d2-406a-9346-3a4683612aab',
+	(select id from clubs where name = 'Porto'),
+	'permanent',
+	2,
+	'2025-11-30'
+),
+(
+	'5f2726b1-d00e-4a85-beab-ee815dd271aa',
+	(select id from clubs where name = 'Lakers'),
+	'dual_license',
+	13,
+	'2025-11-11'
+),
+(
+	'5f2726b1-d00e-4a85-beab-ee815dd271aa',
+	(select id from clubs where name = 'Coster'),
+	'dual_license',
+	12,
+	'2025-11-11'
+),
+(
+	'744d82c1-25fc-4517-819a-54c876a1b509',
+	(select id from clubs where name = 'Coster'),
+	'permanent',
+	8,
+	'2026-08-17'
+),
+(
+	'7f329ba1-33e3-4147-aed7-b33ef8e3eaea',
+	(select id from clubs where name = 'Coster'),
+	'permanent',
+	9,
+	'2026-06-16'
+),
+(
+	'7f329ba1-33e3-4147-aed7-b33ef8e3eaea',
+	(select id from clubs where name = 'Porto'),
+	'loan',
+	4,
+	'2026-09-13'
+),
+(
+	'8e63bbff-c353-42f1-b127-1a27c036dab5',
+	(select id from clubs where name = 'Lakers'),
+	'permanent',
+	6,
+	'2025-06-06'
+),
+(
+	'906188e2-aeff-4e8e-ad54-2efd4558c321',
+	(select id from clubs where name = 'Lakers'),
+	'permanent',
+	3,
+	'2025-04-26'
+),
+(
+	'95fd7165-4135-489e-8731-92fd5ebe7bd1',
+	(select id from clubs where name = 'Coster'),
+	'permanent',
+	5,
+	'2025-03-20'
+),
+(
+	'9ec6ee5d-bbf2-4115-90db-df4df1f479d4',
+	(select id from clubs where name = 'Lakers'),
+	'permanent',
+	19,
+	'2024-07-29'
+),
+(
+	'a0b8bba9-a558-433d-89f3-956876927b95',
+	(select id from clubs where name = 'Porto'),
+	'dual_license',
+	19,
+	'2024-07-02'
+),
+(
+	'a0b8bba9-a558-433d-89f3-956876927b95',
+	(select id from clubs where name = 'Coster'),
+	'dual_license',
+	11,
+	'2024-07-02'
+),
+(
+	'b10d0380-ed1f-49d9-a996-86746ac92a07',
+	(select id from clubs where name = 'Lakers'),
+	'permanent',
+	14,
+	'2024-08-28'
+),
+(
 	'48460bd5-b119-4220-a5cc-8e3c0fc083e4',
 	(select id from clubs where name = 'Coster'),
 	'loan',
@@ -130,9 +221,6 @@ order by clubs.id;
 
 
 
-
-
-
 select clubs.name, players.position, count(*)
 from players 
 inner join player_registrations 
@@ -146,7 +234,7 @@ drop table clubs;
 drop table players;
 drop table player_registrations;
 
-delete * from player_registrations;
+delete from player_registrations;
 
 
 
