@@ -11,4 +11,12 @@
     <ProjectReference Include="..\VolleyballApp.repository\VolleyballApp.repository.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+	</ItemGroup>
+
 </Project>

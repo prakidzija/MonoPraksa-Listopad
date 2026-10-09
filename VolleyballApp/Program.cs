@@ -4,6 +4,8 @@ using VolleyballApp.service;
 using Microsoft.EntityFrameworkCore;
 using VolleyballApp.model;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +29,43 @@ builder.Services.AddDbContext<PraksaDbContext>(options =>
 
 builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 builder.Services.AddScoped<IPlayerService, PlayerService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
+
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT Key is missing.");
+
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]
+    ?? throw new InvalidOperationException("JWT Issuer is missing.");
+
+var jwtAudience = builder.Configuration["Jwt:Audience"]
+    ?? throw new InvalidOperationException("JWT Audience is missing.");
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Convert.FromBase64String(jwtKey)
+            )
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();
@@ -39,6 +77,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

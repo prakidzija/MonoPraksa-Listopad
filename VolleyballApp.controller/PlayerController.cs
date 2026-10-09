@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VolleyballApp.model;
 using VolleyballApp.service;
+using Microsoft.AspNetCore.Authorization;
 
 namespace VolleyballApp.controller
 {
@@ -15,6 +16,8 @@ namespace VolleyballApp.controller
             _playerService = playerService;
         }
 
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -23,6 +26,7 @@ namespace VolleyballApp.controller
             return Ok(players);
         }
 
+        [Authorize]
         [HttpGet("player")]
         public async Task<IActionResult> GetAllPlayers()
         {
@@ -30,6 +34,7 @@ namespace VolleyballApp.controller
             return Ok(players);
         }
 
+        [Authorize]
         [HttpGet("club")]
         public async Task<IActionResult> GetAllClubs()
         {
@@ -37,6 +42,7 @@ namespace VolleyballApp.controller
             return Ok(clubs);
         }
 
+        [Authorize]
         [HttpGet("registration")]
         public async Task<IActionResult> GetAllRegistrations()
         {
@@ -44,6 +50,7 @@ namespace VolleyballApp.controller
             return Ok(registrations);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
@@ -57,6 +64,7 @@ namespace VolleyballApp.controller
             return Ok(player);
         }
 
+        [Authorize]
         [HttpGet("filter")]
         public async Task<IActionResult> GetByFilterAsync(
             [FromQuery] string? name,
@@ -71,6 +79,7 @@ namespace VolleyballApp.controller
             return Ok(players);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(
             [FromBody] Player player)
@@ -82,9 +91,10 @@ namespace VolleyballApp.controller
                 return Conflict();
             }
 
-            return Ok(player);
+            return StatusCode(201);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Player updatedPlayer)
         {
@@ -100,6 +110,7 @@ namespace VolleyballApp.controller
             return Ok(updatedPlayer);
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {

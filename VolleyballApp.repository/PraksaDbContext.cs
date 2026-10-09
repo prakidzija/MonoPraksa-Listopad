@@ -17,6 +17,8 @@ public partial class PraksaDbContext : DbContext
 
     public virtual DbSet<PlayerRegistration> PlayerRegistrations { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pgcrypto");
@@ -89,6 +91,33 @@ public partial class PraksaDbContext : DbContext
                 .HasForeignKey(d => d.PlayerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("player_registrations_player_id_fkey");
+        });
+
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("users_pkey");
+
+            entity.ToTable("users");
+
+            entity.HasIndex(e => e.Email, "users_email_key").IsUnique();
+
+            entity.HasIndex(e => e.Username, "users_username_key").IsUnique();
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .HasColumnName("email");
+            entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+            entity.Property(e => e.Role)
+                .HasMaxLength(20)
+                .HasDefaultValueSql("'USER'::character varying")
+                .HasColumnName("role");
+            entity.Property(e => e.Username)
+                .HasMaxLength(30)
+                .HasColumnName("username");
         });
 
         OnModelCreatingPartial(modelBuilder);
