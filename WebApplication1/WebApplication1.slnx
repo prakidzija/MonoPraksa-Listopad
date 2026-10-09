@@ -1,7 +1,0 @@
-<Solution>
-  <Project Path="../WebApplication1.controller/WebApplication1.controller.csproj" Id="d45ada73-bdfd-46ac-9795-83957ad9444e" />
-  <Project Path="../WebApplication1.model/WebApplication1.model.csproj" Id="34ca16a4-d6d9-45d8-89e7-91dca8658574" />
-  <Project Path="../WebApplication1.repository/WebApplication1.repository.csproj" Id="83cbd0b1-a240-4299-962b-5462a17b08b0" />
-  <Project Path="../WebApplication1.service/WebApplication1.service.csproj" Id="b769612d-fed2-4766-9f8c-cf8c76651827" />
-  <Project Path="WebApplication1.csproj" />
-</Solution>

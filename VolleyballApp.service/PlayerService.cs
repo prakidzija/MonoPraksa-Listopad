@@ -1,13 +1,14 @@
-﻿using WebApplication1.model;
-using WebApplication1.repository;
+﻿using VolleyballApp.model;
+using VolleyballApp.repository;
 
-namespace WebApplication1.service
+namespace VolleyballApp.service
 {
     public interface IPlayerService
     {
         Task<List<Player>> GetAllAsync();
         Task<List<Player>> GetAllPlayers();
         Task<List<Club>> GetAllClubs();
+        Task<List<PlayerRegistration>> GetAllRegistrations();
 
         Task<Player?> GetByIdAsync(Guid id);
 
@@ -48,6 +49,11 @@ namespace WebApplication1.service
         public async Task<List<Club>> GetAllClubs()
         {
             return await _repository.GetAllClubs();
+        }
+
+        public async Task<List<PlayerRegistration>> GetAllRegistrations()
+        {
+            return await _repository.GetAllRegistrations();
         }
 
 

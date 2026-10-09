@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WebApplication1.model;
+using VolleyballApp.model;
 
-namespace WebApplication1.repository
+namespace VolleyballApp.repository
 {
     public interface IPlayerRepository
     {
         Task<List<Player>> GetAllAsync();
         Task<List<Player>> GetAllPlayers();
         Task<List<Club>> GetAllClubs();
+        Task<List<PlayerRegistration>> GetAllRegistrations();
         Task<Player?> GetByIdAsync(Guid id);
         Task AddAsync(Player player);
         Task UpdateAsync(Player player);
@@ -39,6 +40,11 @@ namespace WebApplication1.repository
         public async Task<List<Club>> GetAllClubs()
         {
             return await _context.Clubs.ToListAsync();
+        }
+
+        public async Task<List<PlayerRegistration>> GetAllRegistrations()
+        {
+            return await _context.PlayerRegistrations.ToListAsync();
         }
 
         public async Task<Player?> GetByIdAsync(Guid id)

@@ -236,6 +236,8 @@ drop table player_registrations;
 
 delete from player_registrations;
 
+select * from clubs;
+
 
 
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication1.model;
-using WebApplication1.service;
+using VolleyballApp.model;
+using VolleyballApp.service;
 
-namespace WebApplication1.controller
+namespace VolleyballApp.controller
 {
     [ApiController]
     [Route("[controller]")]
@@ -35,6 +35,13 @@ namespace WebApplication1.controller
         {
             var clubs = await _playerService.GetAllClubs();
             return Ok(clubs);
+        }
+
+        [HttpGet("registration")]
+        public async Task<IActionResult> GetAllRegistrations()
+        {
+            var registrations = await _playerService.GetAllRegistrations();
+            return Ok(registrations);
         }
 
         [HttpGet("{id}")]

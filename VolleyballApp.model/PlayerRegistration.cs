@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebApplication1.model;
+namespace VolleyballApp.model;
 
 public partial class PlayerRegistration
 {

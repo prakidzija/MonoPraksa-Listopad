@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebApplication1.model;
+namespace VolleyballApp.model;
 
-public partial class Player
+public partial class Club
 {
     public Guid Id { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public int Age { get; set; }
-
-    public string? Position { get; set; }
+    public string Adress { get; set; } = null!;
 
     public virtual ICollection<PlayerRegistration> PlayerRegistrations { get; set; } = new List<PlayerRegistration>();
 }

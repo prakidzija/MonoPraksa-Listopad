@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebApplication1.model\WebApplication1.model.csproj" />
-    <ProjectReference Include="..\WebApplication1.repository\WebApplication1.repository.csproj" />
+    <ProjectReference Include="..\VolleyballApp.model\VolleyballApp.model.csproj" />
+    <ProjectReference Include="..\VolleyballApp.repository\VolleyballApp.repository.csproj" />
   </ItemGroup>
 
 </Project>

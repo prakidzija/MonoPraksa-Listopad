@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApplication1.model;
+namespace VolleyballApp.model;
 
 public partial class PraksaDbContext : DbContext
 {
