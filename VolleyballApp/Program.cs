@@ -1,8 +1,8 @@
-using VolleyballApp.controller;
-using VolleyballApp.repository;
-using VolleyballApp.service;
+using VolleyballApp.Controller;
+using VolleyballApp.Repository;
+using VolleyballApp.Service;
 using Microsoft.EntityFrameworkCore;
-using VolleyballApp.model;
+using VolleyballApp.Model;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;

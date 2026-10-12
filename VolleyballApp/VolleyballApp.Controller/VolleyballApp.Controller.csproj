@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VolleyballApp.model\VolleyballApp.model.csproj" />
-    <ProjectReference Include="..\VolleyballApp.service\VolleyballApp.service.csproj" />
+    <ProjectReference Include="..\VolleyballApp.Model\VolleyballApp.Model.csproj" />
+    <ProjectReference Include="..\VolleyballApp.Service\VolleyballApp.Service.csproj" />
   </ItemGroup>
 
 </Project>

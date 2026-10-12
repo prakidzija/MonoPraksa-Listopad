@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿﻿using System.ComponentModel.DataAnnotations;
 
-namespace VolleyballApp.model;
+namespace VolleyballApp.Model;
 
 public class RegisterUser
 {

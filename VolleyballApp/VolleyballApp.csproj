@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -17,13 +17,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VolleyballApp.controller\VolleyballApp.controller.csproj" />
-    <ProjectReference Include="..\VolleyballApp.repository\VolleyballApp.repository.csproj" />
-    <ProjectReference Include="..\VolleyballApp.service\VolleyballApp.service.csproj" />
+    <ProjectReference Include=".\VolleyballApp.Controller\VolleyballApp.Controller.csproj" />
+    <ProjectReference Include=".\VolleyballApp.Repository\VolleyballApp.Repository.csproj" />
+    <ProjectReference Include=".\VolleyballApp.Service\VolleyballApp.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="VolleyballApp.Model\**\*.cs" />
+    <Compile Remove="VolleyballApp.Repository\**\*.cs" />
+    <Compile Remove="VolleyballApp.Service\**\*.cs" />
+    <Compile Remove="VolleyballApp.Controller\**\*.cs" />
+</ItemGroup>
 
 </Project>

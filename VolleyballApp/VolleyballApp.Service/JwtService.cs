@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using VolleyballApp.model;
+using VolleyballApp.Model;
 
-namespace VolleyballApp.service
+namespace VolleyballApp.Service
 {
     public class JwtService : IJwtService
     {

@@ -1,7 +1,7 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 
-namespace VolleyballApp.model;
+namespace VolleyballApp.Model;
 
 public partial class User
 {

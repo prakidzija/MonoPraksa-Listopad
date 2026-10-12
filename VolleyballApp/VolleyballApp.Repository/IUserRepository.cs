@@ -1,9 +1,9 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using VolleyballApp.model;
+using VolleyballApp.Model;
 
-namespace VolleyballApp.repository
+namespace VolleyballApp.Repository
 {
     public interface IUserRepository
     {

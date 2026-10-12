@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using VolleyballApp.model;
-using VolleyballApp.service;
+﻿﻿using Microsoft.AspNetCore.Mvc;
+using VolleyballApp.Model;
+using VolleyballApp.Service;
 using Microsoft.AspNetCore.Authorization;
 
-namespace VolleyballApp.controller
+namespace VolleyballApp.Controller
 {
     [ApiController]
     [Route("[controller]")]

@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using VolleyballApp.model;
-using VolleyballApp.repository;
+﻿﻿using Microsoft.AspNetCore.Identity;
+using VolleyballApp.Model;
+using VolleyballApp.Repository;
 
-namespace VolleyballApp.service
+namespace VolleyballApp.Service
 {
     public class UserService : IUserService
     {

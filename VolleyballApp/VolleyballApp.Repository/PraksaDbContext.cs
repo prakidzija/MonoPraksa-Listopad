@@ -1,8 +1,8 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace VolleyballApp.model;
+namespace VolleyballApp.Model;
 
 public partial class PraksaDbContext : DbContext
 {
