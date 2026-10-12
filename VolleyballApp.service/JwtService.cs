@@ -6,11 +6,6 @@ using VolleyballApp.model;
 
 namespace VolleyballApp.service
 {
-    public interface IJwtService
-    {
-        string GenerateToken(User user);
-    }
-
     public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;

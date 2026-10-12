@@ -3,18 +3,6 @@ using VolleyballApp.model;
 
 namespace VolleyballApp.repository
 {
-    public interface IPlayerRepository
-    {
-        Task<List<Player>> GetAllAsync();
-        Task<List<Player>> GetAllPlayers();
-        Task<List<Club>> GetAllClubs();
-        Task<List<PlayerRegistration>> GetAllRegistrations();
-        Task<Player?> GetByIdAsync(Guid id);
-        Task AddAsync(Player player);
-        Task UpdateAsync(Player player);
-        Task DeleteAsync(Player player);
-    }
-
     public class PlayerRepository : IPlayerRepository
     {
         private readonly PraksaDbContext _context;
@@ -32,17 +20,17 @@ namespace VolleyballApp.repository
                 .ToListAsync();
         }
 
-        public async Task<List<Player>> GetAllPlayers()
+        public async Task<List<Player>> GetAllPlayersAsync()
         {
             return await _context.Players.ToListAsync();
         }
 
-        public async Task<List<Club>> GetAllClubs()
+        public async Task<List<Club>> GetAllClubsAsync()
         {
             return await _context.Clubs.ToListAsync();
         }
 
-        public async Task<List<PlayerRegistration>> GetAllRegistrations()
+        public async Task<List<PlayerRegistration>> GetAllRegistrationsAsync()
         {
             return await _context.PlayerRegistrations.ToListAsync();
         }
@@ -53,6 +41,41 @@ namespace VolleyballApp.repository
                 .Include(p => p.PlayerRegistrations)
                 .ThenInclude(r => r.Club)
                 .FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<List<Player>> GetByFilterAsync(
+                string? name,
+                string? position,
+                string? currentClub)
+        {
+            IQueryable<Player> query = _context.Players;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(p => p.Name == name);
+            }
+
+            if (!string.IsNullOrEmpty(position))
+            {
+                query = query.Where(p => p.Position == position);
+            }
+
+            if (!string.IsNullOrEmpty(currentClub))
+            {
+                Club? club = await _context.Clubs.FirstOrDefaultAsync(c => c.Name == currentClub);
+
+                if (club == null)
+                {
+                    return new List<Player>();
+                }
+
+
+                var playerIds = await _context.PlayerRegistrations.Where(r => r.ClubId == club.Id).Select(r => r.PlayerId).ToListAsync();
+
+                query = query.Where(p => playerIds.Contains(p.Id));
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task AddAsync(Player player)

@@ -240,10 +240,10 @@ select * from clubs;
 
 create table users(
 	id uuid primary key default gen_random_uuid(),
-	username varchar(30) not null unique,
-	email varchar(50) not null unique,
+	username varchar(100) not null unique,
+	email varchar(120) not null unique,
 	password_hash text not null,
-	role varchar(20) not null default 'USER'
+	role varchar(10) not null default 'USER'
 		check (role in ('ADMIN', 'USER'))
 );
 

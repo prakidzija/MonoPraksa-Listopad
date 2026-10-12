@@ -3,29 +3,6 @@ using VolleyballApp.repository;
 
 namespace VolleyballApp.service
 {
-    public interface IPlayerService
-    {
-        Task<List<Player>> GetAllAsync();
-        Task<List<Player>> GetAllPlayers();
-        Task<List<Club>> GetAllClubs();
-        Task<List<PlayerRegistration>> GetAllRegistrations();
-
-        Task<Player?> GetByIdAsync(Guid id);
-
-        Task<List<Player>> GetByFilterAsync(
-            string? name,
-            string? position,
-            string? currentClub
-        );
-
-        Task<bool> CreateAsync(Player player);
-
-        Task<bool> UpdateAsync(Guid id, Player updatedPlayer);
-
-        Task<bool> DeleteAsync(Guid id);
-    }
-
-
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerRepository _repository;
@@ -43,17 +20,17 @@ namespace VolleyballApp.service
 
         public async Task<List<Player>> GetAllPlayers()
         {
-            return await _repository.GetAllPlayers();
+            return await _repository.GetAllPlayersAsync();
         }
 
         public async Task<List<Club>> GetAllClubs()
         {
-            return await _repository.GetAllClubs();
+            return await _repository.GetAllClubsAsync();
         }
 
         public async Task<List<PlayerRegistration>> GetAllRegistrations()
         {
-            return await _repository.GetAllRegistrations();
+            return await _repository.GetAllRegistrationsAsync();
         }
 
 
@@ -68,32 +45,7 @@ namespace VolleyballApp.service
             string? position,
             string? currentClub)
         {
-            IEnumerable<Player> foundPlayers =
-                await _repository.GetAllAsync();
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                foundPlayers = foundPlayers
-                    .Where(p => p.Name == name);
-            }
-
-            if (!string.IsNullOrEmpty(position))
-            {
-                foundPlayers = foundPlayers
-                    .Where(p => p.Position == position);
-            }
-
-            if (!string.IsNullOrEmpty(currentClub))
-            {
-                foundPlayers = foundPlayers.Where(p =>
-                    p.PlayerRegistrations.Any(r =>
-                        r.Club != null &&
-                        r.Club.Name == currentClub
-                    )
-                );
-            }
-
-            return foundPlayers.ToList();
+            return await _repository.GetByFilterAsync(name, position, currentClub);
         }
 
 

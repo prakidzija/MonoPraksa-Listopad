@@ -3,13 +3,6 @@ using VolleyballApp.model;
 
 namespace VolleyballApp.repository
 {
-    public interface IUserRepository
-    {
-        Task<User?> GetByUsernameAsync(string username);
-        Task<User?> GetByEmailAsync(string email);
-        Task AddAsync(User user);
-    }
-
     public class UserRepository : IUserRepository
     {
         private readonly PraksaDbContext _context;

@@ -4,10 +4,10 @@ namespace VolleyballApp.model;
 
 public class LoginUser
 {
-    [Required]
-    [EmailAddress]
+    [Required(ErrorMessage = "Email is required!")]
+    [EmailAddress(ErrorMessage = "Invalid email format!")]
     public string Email { get; set; } = null!;
 
-    [Required]
+    [Required(ErrorMessage = "Password is required!")]
     public string Password { get; set; } = null!;
 }

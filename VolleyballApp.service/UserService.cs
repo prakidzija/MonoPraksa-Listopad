@@ -4,12 +4,6 @@ using VolleyballApp.repository;
 
 namespace VolleyballApp.service
 {
-    public interface IUserService
-    {
-        Task RegisterAsync(RegisterUser request);
-        Task<User?> LoginAsync(LoginUser request);
-    }
-
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;

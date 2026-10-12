@@ -28,25 +28,25 @@ namespace VolleyballApp.controller
 
         [Authorize]
         [HttpGet("player")]
-        public async Task<IActionResult> GetAllPlayers()
+        public async Task<IActionResult> GetAllPlayersAsync()
         {
-            var players = await _playerService.GetAllPlayers();
+            var players = await _playerService.GetAllPlayersAsync();
             return Ok(players);
         }
 
         [Authorize]
         [HttpGet("club")]
-        public async Task<IActionResult> GetAllClubs()
+        public async Task<IActionResult> GetAllClubsAsync()
         {
-            var clubs = await _playerService.GetAllClubs();
+            var clubs = await _playerService.GetAllClubsAsync();
             return Ok(clubs);
         }
 
         [Authorize]
         [HttpGet("registration")]
-        public async Task<IActionResult> GetAllRegistrations()
+        public async Task<IActionResult> GetAllRegistrationsAsync()
         {
-            var registrations = await _playerService.GetAllRegistrations();
+            var registrations = await _playerService.GetAllRegistrationsAsync();
             return Ok(registrations);
         }
 
