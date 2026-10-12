@@ -20,10 +20,10 @@ namespace VolleyballApp.Service
             string? currentClub
         );
 
-        Task<bool> CreateAsync(Player player);
+        Task CreateAsync(Player player);
 
-        Task<bool> UpdateAsync(Guid id, Player updatedPlayer);
+        Task UpdateAsync(Guid id, Player updatedPlayer);
 
-        Task<bool> DeleteAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

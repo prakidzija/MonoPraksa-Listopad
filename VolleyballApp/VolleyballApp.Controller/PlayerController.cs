@@ -84,12 +84,7 @@ namespace VolleyballApp.Controller
         public async Task<IActionResult> CreateAsync(
             [FromBody] Player player)
         {
-            bool created = await _playerService.CreateAsync(player);
-
-            if (!created)
-            {
-                return Conflict();
-            }
+            await _playerService.CreateAsync(player);
 
             return StatusCode(201);
         }
@@ -98,30 +93,34 @@ namespace VolleyballApp.Controller
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Player updatedPlayer)
         {
-            bool updated = await _playerService.UpdateAsync(
-                id,
-                updatedPlayer);
-
-            if (!updated)
+            try
             {
-                return NotFound();
+                await _playerService.UpdateAsync(id, updatedPlayer);
+                return Ok(updatedPlayer);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
             }
 
-            return Ok(updatedPlayer);
+            
         }
 
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            bool deleted = await _playerService.DeleteAsync(id);
-
-            if (!deleted)
+            try
             {
-                return NotFound();
-            }
+                await _playerService.DeleteAsync(id);
 
-            return Ok();
+                return StatusCode(200, "Player deleted successfully.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            
         }
     }
 }
