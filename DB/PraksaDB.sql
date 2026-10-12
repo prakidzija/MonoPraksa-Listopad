@@ -247,6 +247,13 @@ create table users(
 		check (role in ('ADMIN', 'USER'))
 );
 
+select * from users;
+
+UPDATE users
+SET role = 'ADMIN'
+WHERE username = 'patricia';
+
+
 
 
 

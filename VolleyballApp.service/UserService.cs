@@ -46,7 +46,7 @@ namespace VolleyballApp.service
                 Id = Guid.NewGuid(),
                 Username = request.Username,
                 Email = request.Email,
-                Role = "USER"
+                Role = Roles.User
             };
 
             user.PasswordHash = _passwordHasher.HashPassword(

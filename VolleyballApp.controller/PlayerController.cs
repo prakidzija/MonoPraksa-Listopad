@@ -79,7 +79,7 @@ namespace VolleyballApp.controller
             return Ok(players);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         public async Task<IActionResult> CreateAsync(
             [FromBody] Player player)
@@ -94,7 +94,7 @@ namespace VolleyballApp.controller
             return StatusCode(201);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] Player updatedPlayer)
         {
@@ -110,7 +110,7 @@ namespace VolleyballApp.controller
             return Ok(updatedPlayer);
         }
 
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
