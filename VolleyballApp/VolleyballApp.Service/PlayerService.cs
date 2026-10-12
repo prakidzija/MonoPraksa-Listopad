@@ -1,7 +1,7 @@
-﻿using VolleyballApp.model;
-using VolleyballApp.repository;
+﻿﻿using VolleyballApp.Model;
+using VolleyballApp.Repository;
 
-namespace VolleyballApp.service
+namespace VolleyballApp.Service
 {
     public class PlayerService : IPlayerService
     {
@@ -13,39 +13,39 @@ namespace VolleyballApp.service
         }
 
 
-        public async Task<List<Player>> GetAllAsync()
+        public Task<List<Player>> GetAllAsync()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllAsync();
         }
 
-        public async Task<List<Player>> GetAllPlayers()
+        public Task<List<Player>> GetAllPlayersAsync()
         {
-            return await _repository.GetAllPlayersAsync();
+            return _repository.GetAllPlayersAsync();
         }
 
-        public async Task<List<Club>> GetAllClubs()
+        public Task<List<Club>> GetAllClubsAsync()
         {
-            return await _repository.GetAllClubsAsync();
+            return _repository.GetAllClubsAsync();
         }
 
-        public async Task<List<PlayerRegistration>> GetAllRegistrations()
+        public Task<List<PlayerRegistration>> GetAllRegistrationsAsync()
         {
-            return await _repository.GetAllRegistrationsAsync();
-        }
-
-
-        public async Task<Player?> GetByIdAsync(Guid id)
-        {
-            return await _repository.GetByIdAsync(id);
+            return _repository.GetAllRegistrationsAsync();
         }
 
 
-        public async Task<List<Player>> GetByFilterAsync(
+        public Task<Player?> GetByIdAsync(Guid id)
+        {
+            return _repository.GetByIdAsync(id);
+        }
+
+
+        public Task<List<Player>> GetByFilterAsync(
             string? name,
             string? position,
             string? currentClub)
         {
-            return await _repository.GetByFilterAsync(name, position, currentClub);
+            return _repository.GetByFilterAsync(name, position, currentClub);
         }
 
 

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VolleyballApp.model;
+﻿﻿using Microsoft.EntityFrameworkCore;
+using VolleyballApp.Model;
 
-namespace VolleyballApp.repository
+namespace VolleyballApp.Repository
 {
     public class UserRepository : IUserRepository
     {

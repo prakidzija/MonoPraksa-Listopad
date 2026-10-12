@@ -1,8 +1,8 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace VolleyballApp.model
+namespace VolleyballApp.Model
 {
     public static class Roles
     {
