@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../VolleyballApp.controller/VolleyballApp.controller.csproj" />
+  <Project Path="../VolleyballApp.model/VolleyballApp.model.csproj" />
+  <Project Path="../VolleyballApp.repository/VolleyballApp.repository.csproj" />
+  <Project Path="../VolleyballApp.service/VolleyballApp.service.csproj" />
+  <Project Path="VolleyballApp.csproj" />
+</Solution>
