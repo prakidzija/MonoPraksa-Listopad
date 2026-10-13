@@ -7,8 +7,7 @@ namespace VolleyballApp.Service
 {
     public interface IPlayerService
     {
-        Task<List<Player>> GetAllAsync();
-        Task<List<Player>> GetAllPlayersAsync();
+        Task<List<PlayerDto>> GetAllPlayersAsync();
         Task<List<Club>> GetAllClubsAsync();
         Task<List<PlayerRegistration>> GetAllRegistrationsAsync();
 

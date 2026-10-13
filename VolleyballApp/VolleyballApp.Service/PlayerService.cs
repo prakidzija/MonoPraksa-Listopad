@@ -1,6 +1,7 @@
 ﻿﻿using VolleyballApp.Model;
 using VolleyballApp.Repository;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace VolleyballApp.Service
 {
@@ -16,14 +17,19 @@ namespace VolleyballApp.Service
         }
 
 
-        public Task<List<Player>> GetAllAsync()
+        public async Task<List<PlayerDto>> GetAllPlayersAsync()
         {
-            return _repository.GetAllAsync();
-        }
+            var players = await _repository.GetAllAsync();
+            var output = players.Select(p => new PlayerDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Age = p.Age,
+                Position = p.Position,
+                Clubs = p.PlayerRegistrations.Where(r => r.Club != null).Select(r => r.Club!.Name).ToList()
+            }).ToList();
 
-        public Task<List<Player>> GetAllPlayersAsync()
-        {
-            return _repository.GetAllPlayersAsync();
+            return output;
         }
 
         public Task<List<Club>> GetAllClubsAsync()

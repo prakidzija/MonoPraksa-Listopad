@@ -18,15 +18,6 @@ namespace VolleyballApp.Controller
 
 
         [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
-        {
-            var players = await _playerService.GetAllAsync();
-
-            return Ok(players);
-        }
-
-        [Authorize]
         [HttpGet("player")]
         public async Task<IActionResult> GetAllPlayersAsync()
         {
@@ -75,6 +66,7 @@ namespace VolleyballApp.Controller
                 name,
                 position,
                 currentClub);
+
 
             return Ok(players);
         }
