@@ -78,9 +78,9 @@ namespace VolleyballApp.Repository
             return await query.ToListAsync();
         }
 
-        public async Task AddAsync(Player player)
+        public async Task CreateAsync(Player player)
         {
-            await _context.Players.AddAsync(player);
+            _context.Players.Add(player);
             await _context.SaveChangesAsync();
         }
 

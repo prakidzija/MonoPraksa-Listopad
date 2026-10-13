@@ -16,7 +16,7 @@ namespace VolleyballApp.Repository
             string? name,
             string? position,
             string? currentClub);
-        Task AddAsync(Player player);
+        Task CreateAsync(Player player);
         Task UpdateAsync(Player player);
         Task DeleteAsync(Player player);
     }
