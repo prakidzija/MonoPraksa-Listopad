@@ -84,4 +84,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/api/health", () =>
+{
+    return Results.Ok(new
+    {
+        message = "Backend radi!",
+        status = "OK"
+    });
+});
+
 app.Run();

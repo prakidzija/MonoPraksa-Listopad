@@ -11,10 +11,10 @@ function App() {
         <div>
             <nav>
                 <Link to="/">HomePage</Link>{" | "}
-                <Link to="/login">Prijava</Link>{" | "}
-                <Link to="/register">Registracija</Link>{" | "}
-                <Link to="/players">Igrači</Link>{" | "}
-                <Link to="/clubs">Klubovi</Link>
+                <Link to="/login">Login</Link>{" | "}
+                <Link to="/register">Registration</Link>{" | "}
+                <Link to="/players">Players</Link>{" | "}
+                <Link to="/clubs">Clubs</Link>
             </nav>
 
             <hr />
