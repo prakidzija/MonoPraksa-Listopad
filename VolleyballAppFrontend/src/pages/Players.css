@@ -23,6 +23,8 @@
 
 .players-toolbar {
     display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
     justify-content: flex-end;
     margin-bottom: 16px;
 }
@@ -40,6 +42,19 @@
 
 .players-filter-reset {
     background-color: transparent;
+}
+
+.players-add-fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.players-filter-button:disabled,
+.players-add-fieldset:disabled button {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .players-filter-button:hover,

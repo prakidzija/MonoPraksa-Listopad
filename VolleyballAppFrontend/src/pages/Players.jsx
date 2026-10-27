@@ -9,6 +9,11 @@ function Players() {
     const [filtersOpen, setFiltersOpen] = useState(false);
     const [draftFilters, setDraftFilters] = useState({ name: "", age: "", position: "", club: "" });
     const [filters, setFilters] = useState({ name: "", age: "", position: "", club: "" });
+    const [addPlayerOpen, setAddPlayerOpen] = useState(false);
+    const [newPlayer, setNewPlayer] = useState({ name: "", age: "", position: "" });
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState("");
+    const [saveMessage, setSaveMessage] = useState("");
 
     useEffect(() => {
         let active = true;
@@ -81,6 +86,59 @@ function Players() {
         setFilters(emptyFilters);
     }
 
+    function updateNewPlayer(event) {
+        const { name, value } = event.target;
+        setNewPlayer(previous => ({ ...previous, [name]: value }));
+    }
+
+    function cancelAddPlayer() {
+        setAddPlayerOpen(false);
+        setNewPlayer({ name: "", age: "", position: "" });
+        setSaveError("");
+    }
+
+    async function savePlayer(event) {
+        event.preventDefault();
+        if (saving) return;
+
+        const name = newPlayer.name.trim();
+        const age = Number(newPlayer.age);
+        if (!name || name.length > 30 || !Number.isInteger(age) || age < 1 || age > 2147483647 || !newPlayer.position) {
+            setSaveError("Enter a name (up to 30 characters), a positive whole-number age, and a position.");
+            return;
+        }
+
+        setSaving(true);
+        setSaveError("");
+        setSaveMessage("");
+
+        try {
+            await apiRequest("/Player", {
+                method: "POST",
+                body: JSON.stringify({ name, age, position: newPlayer.position })
+            });
+        }
+        catch (err) {
+            setSaveError(err.message);
+            setSaving(false);
+            return;
+        }
+
+        cancelAddPlayer();
+        setSaveMessage("Player added successfully.");
+
+        try {
+            const data = await apiRequest("/Player/player");
+            setPlayers(data);
+        }
+        catch (err) {
+            setSaveMessage(`Player added, but the list could not be refreshed. Reload the page to see it. ${err.message}`);
+        }
+        finally {
+            setSaving(false);
+        }
+    }
+
     return (
         <div className="players-container">
             <h1>Player List</h1>
@@ -92,6 +150,23 @@ function Players() {
                 <button
                     type="button"
                     className="players-filter-button"
+                    aria-expanded={addPlayerOpen}
+                    aria-controls="players-add-card"
+                    disabled={saving}
+                    onClick={() => {
+                        if (addPlayerOpen) {
+                            cancelAddPlayer();
+                        } else {
+                            setAddPlayerOpen(true);
+                            setSaveMessage("");
+                        }
+                    }}
+                >
+                    Add player
+                </button>
+                <button
+                    type="button"
+                    className="players-filter-button"
                     aria-expanded={filtersOpen}
                     aria-controls="players-filter-card"
                     onClick={() => setFiltersOpen(previous => !previous)}
@@ -99,6 +174,41 @@ function Players() {
                     Filter
                 </button>
             </div>
+
+            {saveMessage && <p role="status">{saveMessage}</p>}
+
+            {addPlayerOpen && (
+                <form id="players-add-card" className="players-filter-card" onSubmit={savePlayer} aria-labelledby="players-add-heading" aria-busy={saving}>
+                    <h2 id="players-add-heading">Add player</h2>
+                    <p>Saving a player requires an Admin account.</p>
+                    <fieldset className="players-add-fieldset" disabled={saving}>
+                        <div className="players-filter-fields">
+                            <label htmlFor="player-add-name">
+                                Name
+                                <input id="player-add-name" name="name" type="text" maxLength="30" required value={newPlayer.name} onChange={updateNewPlayer} placeholder="Player name" />
+                            </label>
+                            <label htmlFor="player-add-age">
+                                Age
+                                <input id="player-add-age" name="age" type="number" min="1" max="2147483647" step="1" required value={newPlayer.age} onChange={updateNewPlayer} placeholder="Player age" />
+                            </label>
+                            <label htmlFor="player-add-position">
+                                Position
+                                <select id="player-add-position" name="position" required value={newPlayer.position} onChange={updateNewPlayer}>
+                                    <option value="">Select a position</option>
+                                    {["Setter", "Libero", "Middle", "Opposite", "Outside"].map(position => (
+                                        <option key={position} value={position}>{position}</option>
+                                    ))}
+                                </select>
+                            </label>
+                        </div>
+                        <div className="players-filter-actions">
+                            <button type="submit" className="players-filter-button">{saving ? "Saving..." : "Save"}</button>
+                            <button type="button" className="players-filter-reset" onClick={cancelAddPlayer}>Cancel</button>
+                        </div>
+                    </fieldset>
+                    {saveError && <p role="alert">{saveError}</p>}
+                </form>
+            )}
 
             {filtersOpen && (
                 <form id="players-filter-card" className="players-filter-card" onSubmit={applyFilters}>
