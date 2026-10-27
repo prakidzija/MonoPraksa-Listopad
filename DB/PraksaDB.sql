@@ -1,4 +1,5 @@
 create extension if not exists pgcrypto;
+create extension if not exists btree_gist;
 
 
 create table clubs(
@@ -22,12 +23,17 @@ create table player_registrations(
 	club_id uuid not null,
 	registration_type varchar(20) not null
 		check(registration_type in ('permanent', 'loan', 'dual_license')),
-	jersey_number integer not null,
+	jersey_number integer not null
+		constraint player_registrations_jersey_number_check check (jersey_number between 1 and 99),
 	start_date date not null,
 	end_date date,
 	foreign key (player_id) references players(id),
 	foreign key (club_id) references clubs(id),
-	unique (club_id, jersey_number),
+	constraint player_registrations_jersey_dates_excl exclude using gist (
+		club_id with =,
+		jersey_number with =,
+		daterange(start_date, end_date, '[]') with &&
+	),
 	check (end_date is null or end_date >= start_date)
 );
 

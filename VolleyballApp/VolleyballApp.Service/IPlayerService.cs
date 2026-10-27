@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using VolleyballApp.Model;
@@ -10,6 +10,7 @@ namespace VolleyballApp.Service
         Task<List<PlayerDto>> GetAllPlayersAsync();
         Task<List<Club>> GetAllClubsAsync();
         Task<List<PlayerRegistration>> GetAllRegistrationsAsync();
+        Task<Guid> CreateRegistrationAsync(CreatePlayerRegistration request);
 
         Task<Player?> GetByIdAsync(Guid id);
 

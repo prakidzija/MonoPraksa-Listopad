@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Players from "./pages/Players";
 import Clubs from "./pages/Clubs";
+import PlayerRegistrations from "./pages/PlayerRegistrations";
 
 function App() {
     return (
@@ -14,7 +15,8 @@ function App() {
                 <Link to="/login">Login</Link>{" | "}
                 <Link to="/register">Registration</Link>{" | "}
                 <Link to="/players">Players</Link>{" | "}
-                <Link to="/clubs">Clubs</Link>
+                <Link to="/clubs">Clubs</Link>{" | "}
+                <Link to="/player-registrations">Player club registration</Link>
             </nav>
 
             <hr />
@@ -25,6 +27,7 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/players" element={<Players />} />
                 <Route path="/clubs" element={<Clubs />} />
+                <Route path="/player-registrations" element={<PlayerRegistrations />} />
             </Routes>
         </div>
     );

@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +22,7 @@ public partial class PraksaDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pgcrypto");
+        modelBuilder.HasPostgresExtension("btree_gist");
 
         modelBuilder.Entity<Club>(entity =>
         {
@@ -62,13 +63,14 @@ public partial class PraksaDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("player_registrations_pkey");
 
-            entity.ToTable("player_registrations");
+            entity.ToTable("player_registrations", table =>
+                table.HasCheckConstraint("player_registrations_jersey_number_check", "jersey_number BETWEEN 1 AND 99"));
 
             entity.HasIndex(e => e.ClubId, "idx_registrations_club_id");
 
             entity.HasIndex(e => e.PlayerId, "idx_registrations_player_id");
 
-            entity.HasIndex(e => new { e.ClubId, e.JerseyNumber }, "player_registrations_club_id_jersey_number_key").IsUnique();
+            // Date-overlap exclusion constraint is maintained in DB SQL (not an EF unique index).
 
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")

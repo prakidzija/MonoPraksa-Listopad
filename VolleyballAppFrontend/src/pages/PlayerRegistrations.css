@@ -1,0 +1,99 @@
+.registrations-container {
+    width: min(1100px, 95%);
+    margin: 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.registrations-container h1 {
+    text-align: center;
+    color: #ffffff;
+}
+
+.registrations-card {
+    padding: 20px;
+    border: 1px solid #343c55;
+    border-radius: 12px;
+    background-color: #1b2030;
+    color: #e6e9f2;
+}
+
+.registrations-card fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.registrations-card legend {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.registrations-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: 16px;
+}
+
+.registrations-fields label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.registrations-fields input,
+.registrations-fields select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #536487;
+    border-radius: 8px;
+    background-color: #222a3d;
+    color: #e6e9f2;
+    font: inherit;
+    color-scheme: dark;
+}
+
+.registrations-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.registrations-actions button {
+    padding: 10px 18px;
+    border: 1px solid #536487;
+    border-radius: 8px;
+    background-color: #303b59;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+}
+
+.registrations-actions button:hover {
+    background-color: #354363;
+}
+
+.registrations-card :focus-visible {
+    outline: 2px solid #a8b3cf;
+    outline-offset: 3px;
+}
+
+.registrations-card fieldset:disabled button {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+    .registrations-container {
+        width: 100%;
+        margin: 20px auto;
+        padding: 10px;
+    }
+}
