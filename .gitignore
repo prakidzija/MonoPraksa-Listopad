@@ -426,3 +426,19 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+<<<<<<< HEAD
+
+# VolleyballApp backend - generated .NET build directories
+**/bin/
+**/obj/
+
+# VolleyballAppFrontend - React / Vite generated build output
+**/dist/
+
+# Local environment and secret files
+.env.*
+!.env.example
+!.env.*.example
+
+# TypeScript incremental build cache (if used)
+*.tsbuildinfo

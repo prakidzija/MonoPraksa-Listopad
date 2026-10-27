@@ -1,4 +1,4 @@
-﻿﻿using VolleyballApp.Model;
+﻿using VolleyballApp.Model;
 using VolleyballApp.Repository;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -42,6 +42,40 @@ namespace VolleyballApp.Service
             return _repository.GetAllRegistrationsAsync();
         }
 
+
+        public async Task<Guid> CreateRegistrationAsync(CreatePlayerRegistration request)
+        {
+            if (request.PlayerId == Guid.Empty || request.ClubId == Guid.Empty)
+                throw new ArgumentException("Select a player and a club.");
+
+            if (request.RegistrationType is not ("permanent" or "loan" or "dual_license"))
+                throw new ArgumentException("Select a valid registration type.");
+
+            if (request.StartDate == default || request.EndDate < request.StartDate)
+                throw new ArgumentException("A start date is required and the end date must not precede it.");
+
+            if (request.JerseyNumber is < 1 or > 99)
+                throw new ArgumentException("Jersey number must be between 1 and 99.");
+
+            if (await _repository.GetByIdAsync(request.PlayerId) == null ||
+                !await _repository.ClubExistsAsync(request.ClubId))
+                throw new KeyNotFoundException("The selected player or club does not exist.");
+
+            if (await _repository.JerseyNumberExistsAsync(request.ClubId, request.JerseyNumber, request.StartDate, request.EndDate))
+                throw new InvalidOperationException("This jersey number is already registered with the selected club during the selected dates.");
+
+            var registration = new PlayerRegistration
+            {
+                PlayerId = request.PlayerId,
+                ClubId = request.ClubId,
+                RegistrationType = request.RegistrationType,
+                JerseyNumber = request.JerseyNumber,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate
+            };
+            await _repository.CreateRegistrationAsync(registration);
+            return registration.Id;
+        }
 
         public Task<Player?> GetByIdAsync(Guid id)
         {

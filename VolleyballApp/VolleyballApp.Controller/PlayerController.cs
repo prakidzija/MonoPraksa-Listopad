@@ -1,4 +1,4 @@
-﻿﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using VolleyballApp.Model;
 using VolleyballApp.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -39,6 +39,29 @@ namespace VolleyballApp.Controller
         {
             var registrations = await _playerService.GetAllRegistrationsAsync();
             return Ok(registrations);
+        }
+
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("registration")]
+        public async Task<IActionResult> CreateRegistrationAsync([FromBody] CreatePlayerRegistration request)
+        {
+            try
+            {
+                var id = await _playerService.CreateRegistrationAsync(request);
+                return StatusCode(201, new { id });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
 
         [Authorize]

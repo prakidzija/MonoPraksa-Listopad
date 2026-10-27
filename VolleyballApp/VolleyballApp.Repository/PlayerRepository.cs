@@ -1,5 +1,6 @@
-﻿﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using VolleyballApp.Model;
+using Npgsql;
 
 namespace VolleyballApp.Repository
 {
@@ -33,6 +34,38 @@ namespace VolleyballApp.Repository
         public async Task<List<PlayerRegistration>> GetAllRegistrationsAsync()
         {
             return await _context.PlayerRegistrations.ToListAsync();
+        }
+
+        public Task<bool> ClubExistsAsync(Guid id)
+        {
+            return _context.Clubs.AnyAsync(club => club.Id == id);
+        }
+
+        public Task<bool> JerseyNumberExistsAsync(Guid clubId, int jerseyNumber, DateOnly startDate, DateOnly? endDate)
+        {
+            return _context.PlayerRegistrations.AnyAsync(registration =>
+                registration.ClubId == clubId && registration.JerseyNumber == jerseyNumber &&
+                (registration.EndDate == null || registration.EndDate >= startDate) &&
+                (endDate == null || registration.StartDate <= endDate));
+        }
+
+        public async Task CreateRegistrationAsync(PlayerRegistration registration)
+        {
+            _context.PlayerRegistrations.Add(registration);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.ExclusionViolation, ConstraintName: "player_registrations_jersey_dates_excl" })
+            {
+                throw new InvalidOperationException("This jersey number is already registered with the selected club during the selected dates.", ex);
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.ForeignKeyViolation })
+            {
+                throw new KeyNotFoundException("The selected player or club no longer exists.", ex);
+            }
         }
 
         public async Task<Player?> GetByIdAsync(Guid id)
