@@ -1,4 +1,5 @@
 ﻿import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Players.css";
 import { apiRequest } from "../services/api";
 
@@ -266,7 +267,7 @@ function Players() {
                             <tbody>
                                 {filteredPlayers.map(player => (
                                     <tr key={player.id}>
-                                        <td>{player.name}</td>
+                                        <td><Link className="players-name-link" to={`/players/${player.id}/registrations`}>{player.name}</Link></td>
                                         <td>{player.age}</td>
                                         <td>{player.position || "-"}</td>
                                         <td>{player.clubs?.join(", ") || "-"}</td>

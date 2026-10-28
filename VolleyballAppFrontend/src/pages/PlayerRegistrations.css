@@ -46,7 +46,8 @@
 }
 
 .registrations-fields input,
-.registrations-fields select {
+.registrations-fields select,
+.registrations-picker select {
     width: 100%;
     min-width: 0;
     box-sizing: border-box;
@@ -59,14 +60,16 @@
     color-scheme: dark;
 }
 
-.registrations-actions {
+.registrations-actions,
+.registrations-choice {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 20px;
 }
 
-.registrations-actions button {
+.registrations-actions button,
+.registrations-choice button {
     padding: 10px 18px;
     border: 1px solid #536487;
     border-radius: 8px;
@@ -76,11 +79,40 @@
     cursor: pointer;
 }
 
-.registrations-actions button:hover {
+.registrations-actions button:hover,
+.registrations-choice button:hover:not(:disabled) {
     background-color: #354363;
 }
 
-.registrations-card :focus-visible {
+.registrations-choice {
+    margin-bottom: 20px;
+}
+
+.registrations-choice button[aria-pressed="true"] {
+    background-color: #43577d;
+    border-color: #b9d4ff;
+}
+
+.registrations-choice button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.registrations-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #e6e9f2;
+}
+
+.registrations-picker select {
+    max-width: 100%;
+}
+
+.registrations-card :focus-visible,
+.registrations-choice :focus-visible,
+.registrations-picker :focus-visible {
     outline: 2px solid #a8b3cf;
     outline-offset: 3px;
 }
