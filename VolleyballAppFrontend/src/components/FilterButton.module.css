@@ -1,0 +1,27 @@
+.button {
+    padding: 10px 18px;
+    border: 1px solid #536487;
+    border-radius: 8px;
+    background-color: #303b59;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.button:hover:not(:disabled),
+.button:active:not(:disabled),
+.button[aria-expanded="true"] {
+    background-color: #354363;
+}
+
+.button:focus-visible {
+    outline: 2px solid #a8b3cf;
+    outline-offset: 3px;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

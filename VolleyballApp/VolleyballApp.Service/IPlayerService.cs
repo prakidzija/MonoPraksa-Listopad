@@ -9,6 +9,7 @@ namespace VolleyballApp.Service
     {
         Task<List<PlayerDto>> GetAllPlayersAsync();
         Task<List<Club>> GetAllClubsAsync();
+        Task<Guid> CreateClubAsync(CreateClub request);
         Task<List<PlayerRegistration>> GetAllRegistrationsAsync();
         Task<Guid> CreateRegistrationAsync(CreatePlayerRegistration request);
 

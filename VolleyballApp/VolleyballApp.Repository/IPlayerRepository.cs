@@ -10,6 +10,7 @@ namespace VolleyballApp.Repository
         Task<List<Player>> GetAllAsync();
         Task<List<Player>> GetAllPlayersAsync();
         Task<List<Club>> GetAllClubsAsync();
+        Task CreateClubAsync(Club club);
         Task<List<PlayerRegistration>> GetAllRegistrationsAsync();
         Task<bool> ClubExistsAsync(Guid id);
         Task<bool> JerseyNumberExistsAsync(Guid clubId, int jerseyNumber, DateOnly startDate, DateOnly? endDate);
