@@ -58,6 +58,39 @@ namespace VolleyballApp.Service
 
         public async Task<Guid> CreateRegistrationAsync(CreatePlayerRegistration request)
         {
+            await ValidateRegistrationAsync(request);
+
+            var registration = new PlayerRegistration
+            {
+                PlayerId = request.PlayerId,
+                ClubId = request.ClubId,
+                RegistrationType = request.RegistrationType,
+                JerseyNumber = request.JerseyNumber,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate
+            };
+            await _repository.CreateRegistrationAsync(registration);
+            return registration.Id;
+        }
+
+        public async Task UpdateRegistrationAsync(Guid id, CreatePlayerRegistration request)
+        {
+            var registration = await _repository.GetRegistrationByIdAsync(id)
+                ?? throw new KeyNotFoundException("The selected registration no longer exists.");
+
+            await ValidateRegistrationAsync(request, id);
+
+            registration.PlayerId = request.PlayerId;
+            registration.ClubId = request.ClubId;
+            registration.RegistrationType = request.RegistrationType;
+            registration.JerseyNumber = request.JerseyNumber;
+            registration.StartDate = request.StartDate;
+            registration.EndDate = request.EndDate;
+            await _repository.UpdateRegistrationAsync(registration);
+        }
+
+        private async Task ValidateRegistrationAsync(CreatePlayerRegistration request, Guid? excludeRegistrationId = null)
+        {
             if (request.PlayerId == Guid.Empty || request.ClubId == Guid.Empty)
                 throw new ArgumentException("Select a player and a club.");
 
@@ -74,20 +107,8 @@ namespace VolleyballApp.Service
                 !await _repository.ClubExistsAsync(request.ClubId))
                 throw new KeyNotFoundException("The selected player or club does not exist.");
 
-            if (await _repository.JerseyNumberExistsAsync(request.ClubId, request.JerseyNumber, request.StartDate, request.EndDate))
+            if (await _repository.JerseyNumberExistsAsync(request.ClubId, request.JerseyNumber, request.StartDate, request.EndDate, excludeRegistrationId))
                 throw new InvalidOperationException("This jersey number is already registered with the selected club during the selected dates.");
-
-            var registration = new PlayerRegistration
-            {
-                PlayerId = request.PlayerId,
-                ClubId = request.ClubId,
-                RegistrationType = request.RegistrationType,
-                JerseyNumber = request.JerseyNumber,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate
-            };
-            await _repository.CreateRegistrationAsync(registration);
-            return registration.Id;
         }
 
         public Task<Player?> GetByIdAsync(Guid id)

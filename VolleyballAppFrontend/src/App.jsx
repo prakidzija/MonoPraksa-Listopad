@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import Players from "./pages/Players";
 import Clubs from "./pages/Clubs";
 import PlayerRegistrations from "./pages/PlayerRegistrations";
+import Registrations from "./pages/Registrations";
 
 function App() {
     return (
@@ -16,7 +17,7 @@ function App() {
                 <Link to="/register">Registration</Link>{" | "}
                 <Link to="/players">Players</Link>{" | "}
                 <Link to="/clubs">Clubs</Link>{" | "}
-                <Link to="/player-registrations">Player club registration</Link>
+                <Link to="/player-registrations">PlayerRegistration</Link>
             </nav>
 
             <hr />
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/players" element={<Players />} />
+                <Route path="/players/:playerId/registrations" element={<Registrations />} />
                 <Route path="/clubs" element={<Clubs />} />
                 <Route path="/player-registrations" element={<PlayerRegistrations />} />
             </Routes>

@@ -11,6 +11,9 @@ const emptyForm = {
 function PlayerRegistrations() {
     const [players, setPlayers] = useState([]);
     const [clubs, setClubs] = useState([]);
+    const [registrations, setRegistrations] = useState([]);
+    const [mode, setMode] = useState("");
+    const [selectedId, setSelectedId] = useState("");
     const [form, setForm] = useState({ ...emptyForm });
     const [loading, setLoading] = useState(true);
     const [loadError, setLoadError] = useState("");
@@ -22,12 +25,13 @@ function PlayerRegistrations() {
         let active = true;
         async function loadOptions() {
             try {
-                const [playerData, clubData] = await Promise.all([
-                    apiRequest("/Player/player"), apiRequest("/Player/club")
+                const [playerData, clubData, registrationData] = await Promise.all([
+                    apiRequest("/Player/player"), apiRequest("/Player/club"), apiRequest("/Player/registration")
                 ]);
                 if (active) {
                     setPlayers(playerData);
                     setClubs(clubData);
+                    setRegistrations(registrationData);
                 }
             }
             catch (err) {
@@ -48,9 +52,53 @@ function PlayerRegistrations() {
         setError("");
     }
 
-    async function registerPlayer(event) {
+    function chooseMode(nextMode) {
+        setMode(nextMode);
+        setSelectedId("");
+        setForm({ ...emptyForm });
+        setError("");
+        setMessage("");
+    }
+
+    function selectRegistration(event) {
+        const id = event.target.value;
+        const registration = registrations.find(item => item.id === id);
+        setSelectedId(id);
+        setForm(registration ? {
+            playerId: registration.playerId,
+            clubId: registration.clubId,
+            registrationType: registration.registrationType,
+            jerseyNumber: String(registration.jerseyNumber),
+            startDate: registration.startDate,
+            endDate: registration.endDate || ""
+        } : { ...emptyForm });
+        setError("");
+        setMessage("");
+    }
+
+    function resetForm() {
+        if (mode === "edit" && selectedId) {
+            const registration = registrations.find(item => item.id === selectedId);
+            if (registration) {
+                setForm({
+                    playerId: registration.playerId,
+                    clubId: registration.clubId,
+                    registrationType: registration.registrationType,
+                    jerseyNumber: String(registration.jerseyNumber),
+                    startDate: registration.startDate,
+                    endDate: registration.endDate || ""
+                });
+            }
+        } else {
+            setForm({ ...emptyForm });
+        }
+        setError("");
+        setMessage("");
+    }
+
+    async function saveRegistration(event) {
         event.preventDefault();
-        if (saving) return;
+        if (saving || (mode === "edit" && !selectedId)) return;
         setError("");
         setMessage("");
         const jerseyNumber = Number(form.jerseyNumber);
@@ -62,12 +110,18 @@ function PlayerRegistrations() {
         }
         setSaving(true);
         try {
-            await apiRequest("/Player/registration", {
-                method: "POST",
+            await apiRequest(mode === "edit" ? `/Player/registration/${selectedId}` : "/Player/registration", {
+                method: mode === "edit" ? "PUT" : "POST",
                 body: JSON.stringify({ ...form, jerseyNumber, endDate: form.endDate || null })
             });
-            setForm({ ...emptyForm });
-            setMessage("Player registered with the club successfully.");
+            if (mode === "create") setForm({ ...emptyForm });
+            setMessage(mode === "edit" ? "Registration updated successfully." : "Player registered with the club successfully.");
+            try {
+                setRegistrations(await apiRequest("/Player/registration"));
+            }
+            catch (err) {
+                setMessage(`Registration saved, but the list could not be refreshed. Reload the page to see it. ${err.message}`);
+            }
         }
         catch (err) {
             setError(err.message);
@@ -79,16 +133,37 @@ function PlayerRegistrations() {
 
     return (
         <div className="registrations-container">
-            <h1>Player club registration</h1>
-            <p>Register an existing player with a club. Saving requires an Admin account.</p>
-            {loading ? <p role="status">Loading players and clubs...</p> :
+            <h1>Player Registration</h1>
+            <p>Create a registration or edit an existing one.</p>
+            {loading ? <p role="status">Loading registration options...</p> :
                 loadError ? <p role="alert">Unable to load registration options: {loadError}</p> :
                     players.length === 0 || clubs.length === 0 ? (
-                        <p>Add <Link to="/players">players</Link> and <Link to="/clubs">clubs</Link> before creating a registration.</p>
+                        <p>Add <Link to="/players">players</Link> and <Link to="/clubs">clubs</Link> before managing registrations.</p>
                     ) : (
-                        <form className="registrations-card" onSubmit={registerPlayer} aria-busy={saving}>
+                        <>
+                        <div className="registrations-choice" role="group" aria-label="Registration action">
+                            <button type="button" aria-pressed={mode === "create"} disabled={saving} onClick={() => chooseMode("create")}>New registration</button>
+                            <button type="button" aria-pressed={mode === "edit"} disabled={saving} onClick={() => chooseMode("edit")}>Edit existing registration</button>
+                        </div>
+                        {mode === "edit" && (
+                            registrations.length === 0 ? <p>There are no registrations to edit.</p> : (
+                                <label className="registrations-picker" htmlFor="registration-existing">
+                                    Select a registration to edit
+                                    <select id="registration-existing" value={selectedId} disabled={saving} onChange={selectRegistration}>
+                                        <option value="">Select a registration</option>
+                                        {registrations.map(registration => (
+                                            <option key={registration.id} value={registration.id}>
+                                                {players.find(player => player.id === registration.playerId)?.name || "Unknown player"} — {clubs.find(club => club.id === registration.clubId)?.name || "Unknown club"} — {registration.startDate} (#{registration.jerseyNumber})
+                                            </option>
+                                        ))}
+                                    </select>
+                                </label>
+                            )
+                        )}
+                        {(mode === "create" || (mode === "edit" && selectedId)) && (
+                        <form className="registrations-card" onSubmit={saveRegistration} aria-busy={saving}>
                             <fieldset disabled={saving}>
-                                <legend>Registration details</legend>
+                                <legend>{mode === "edit" ? "Edit registration details" : "New registration details"}</legend>
                                 <div className="registrations-fields">
                                     <label htmlFor="registration-player">Player
                                         <select id="registration-player" name="playerId" required value={form.playerId} onChange={updateField}>
@@ -119,19 +194,18 @@ function PlayerRegistrations() {
                                         <input id="registration-end" name="endDate" type="date" min={form.startDate || undefined} value={form.endDate} onChange={updateField} />
                                     </label>
                                 </div>
-                                <p>Choose a jersey number from 1 to 99. Numbers can be reused at the same club when registration dates do not overlap. The end date is included; a blank end date reserves the number indefinitely.</p>
+                                <p>Choose a jersey number from 1 to 99.</p>
                                 <div className="registrations-actions">
-                                    <button type="submit">{saving ? "Registering..." : "Register player"}</button>
-                                    <button type="button" onClick={() => {
-                                        setForm({ ...emptyForm });
-                                        setError("");
-                                        setMessage("");
-                                    }}>Reset</button>
+                                    <button type="submit">{saving ? "Saving..." : mode === "edit" ? "Save changes" : "Register player"}</button>
+                                    <button type="button" onClick={resetForm}>Reset</button>
+                                    <button type="button" onClick={() => chooseMode("")}>Cancel</button>
                                 </div>
                             </fieldset>
                             {error && <p role="alert">{error}</p>}
                             {message && <p role="status">{message}</p>}
                         </form>
+                        )}
+                        </>
                     )}
         </div>
     );

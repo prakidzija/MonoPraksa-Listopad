@@ -158,6 +158,21 @@
     background-color: #354363;
 }
 
+.players-name-link {
+    color: #b9d4ff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.players-name-link:hover {
+    color: #ffffff;
+}
+
+.players-name-link:focus-visible {
+    outline: 2px solid #a8b3cf;
+    outline-offset: 3px;
+}
+
 .players-table tbody tr:last-child td {
     border-bottom: none;
 }

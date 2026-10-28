@@ -12,6 +12,7 @@ namespace VolleyballApp.Service
         Task<Guid> CreateClubAsync(CreateClub request);
         Task<List<PlayerRegistration>> GetAllRegistrationsAsync();
         Task<Guid> CreateRegistrationAsync(CreatePlayerRegistration request);
+        Task UpdateRegistrationAsync(Guid id, CreatePlayerRegistration request);
 
         Task<Player?> GetByIdAsync(Guid id);
 

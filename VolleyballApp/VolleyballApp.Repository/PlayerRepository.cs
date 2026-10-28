@@ -50,15 +50,21 @@ namespace VolleyballApp.Repository
             return await _context.PlayerRegistrations.ToListAsync();
         }
 
+        public Task<PlayerRegistration?> GetRegistrationByIdAsync(Guid id)
+        {
+            return _context.PlayerRegistrations.FirstOrDefaultAsync(registration => registration.Id == id);
+        }
+
         public Task<bool> ClubExistsAsync(Guid id)
         {
             return _context.Clubs.AnyAsync(club => club.Id == id);
         }
 
-        public Task<bool> JerseyNumberExistsAsync(Guid clubId, int jerseyNumber, DateOnly startDate, DateOnly? endDate)
+        public Task<bool> JerseyNumberExistsAsync(Guid clubId, int jerseyNumber, DateOnly startDate, DateOnly? endDate, Guid? excludeRegistrationId = null)
         {
             return _context.PlayerRegistrations.AnyAsync(registration =>
                 registration.ClubId == clubId && registration.JerseyNumber == jerseyNumber &&
+                (excludeRegistrationId == null || registration.Id != excludeRegistrationId) &&
                 (registration.EndDate == null || registration.EndDate >= startDate) &&
                 (endDate == null || registration.StartDate <= endDate));
         }
@@ -66,6 +72,16 @@ namespace VolleyballApp.Repository
         public async Task CreateRegistrationAsync(PlayerRegistration registration)
         {
             _context.PlayerRegistrations.Add(registration);
+            await SaveRegistrationAsync();
+        }
+
+        public Task UpdateRegistrationAsync(PlayerRegistration registration)
+        {
+            return SaveRegistrationAsync();
+        }
+
+        private async Task SaveRegistrationAsync()
+        {
             try
             {
                 await _context.SaveChangesAsync();

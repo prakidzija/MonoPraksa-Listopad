@@ -1,0 +1,75 @@
+.player-registrations-container {
+    width: min(1100px, 95%);
+    margin: 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: left;
+    color: #e6e9f2;
+}
+
+.player-registrations-container h1 {
+    text-align: center;
+    color: #ffffff;
+    overflow-wrap: anywhere;
+}
+
+.player-registrations-back {
+    color: #b9d4ff;
+}
+
+.player-registrations-back:hover {
+    color: #ffffff;
+}
+
+.player-registrations-back:focus-visible {
+    outline: 2px solid #a8b3cf;
+    outline-offset: 3px;
+}
+
+.player-registrations-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #343c55;
+    border-radius: 12px;
+}
+
+.player-registrations-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1b2030;
+}
+
+.player-registrations-table th,
+.player-registrations-table td {
+    padding: 14px 20px;
+    text-align: left;
+    overflow-wrap: anywhere;
+    border-bottom: 1px solid #343c55;
+}
+
+.player-registrations-table th {
+    background-color: #303b59;
+    color: #ffffff;
+    border-bottom: 2px solid #536487;
+}
+
+.player-registrations-table tbody tr:nth-child(even) {
+    background-color: #222a3d;
+}
+
+.player-registrations-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 600px) {
+    .player-registrations-container {
+        width: 100%;
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    .player-registrations-table th,
+    .player-registrations-table td {
+        padding: 12px;
+        font-size: 14px;
+    }
+}

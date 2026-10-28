@@ -83,6 +83,29 @@ namespace VolleyballApp.Controller
             }
         }
 
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPut("registration/{id:guid}")]
+        public async Task<IActionResult> UpdateRegistrationAsync(Guid id, [FromBody] CreatePlayerRegistration request)
+        {
+            try
+            {
+                await _playerService.UpdateRegistrationAsync(id, request);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
