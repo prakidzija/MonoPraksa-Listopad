@@ -6,6 +6,18 @@
     margin-bottom: 16px;
 }
 
+.fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.action:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .card {
     margin-bottom: 20px;
     padding: 20px;

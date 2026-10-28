@@ -33,6 +33,25 @@ namespace VolleyballApp.Controller
             return Ok(clubs);
         }
 
+        [Authorize(Roles = Roles.Admin)]
+        [HttpPost("club")]
+        public async Task<IActionResult> CreateClubAsync([FromBody] CreateClub request)
+        {
+            try
+            {
+                var id = await _playerService.CreateClubAsync(request);
+                return StatusCode(201, new { id });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpGet("registration")]
         public async Task<IActionResult> GetAllRegistrationsAsync()

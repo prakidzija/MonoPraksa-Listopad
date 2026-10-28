@@ -37,6 +37,19 @@ namespace VolleyballApp.Service
             return _repository.GetAllClubsAsync();
         }
 
+        public async Task<Guid> CreateClubAsync(CreateClub request)
+        {
+            var name = request.Name?.Trim();
+            var adress = request.Adress?.Trim();
+            if (string.IsNullOrWhiteSpace(name) || name.Length > 30 ||
+                string.IsNullOrWhiteSpace(adress) || adress.Length > 40)
+                throw new ArgumentException("Enter a name (up to 30 characters) and address (up to 40 characters).");
+
+            var club = new Club { Name = name, Adress = adress };
+            await _repository.CreateClubAsync(club);
+            return club.Id;
+        }
+
         public Task<List<PlayerRegistration>> GetAllRegistrationsAsync()
         {
             return _repository.GetAllRegistrationsAsync();

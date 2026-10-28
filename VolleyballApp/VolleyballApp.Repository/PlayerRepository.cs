@@ -31,6 +31,20 @@ namespace VolleyballApp.Repository
             return await _context.Clubs.ToListAsync();
         }
 
+        public async Task CreateClubAsync(Club club)
+        {
+            _context.Clubs.Add(club);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException
+                { SqlState: PostgresErrorCodes.UniqueViolation, ConstraintName: "clubs_name_key" })
+            {
+                throw new InvalidOperationException("A club with this name already exists.", ex);
+            }
+        }
+
         public async Task<List<PlayerRegistration>> GetAllRegistrationsAsync()
         {
             return await _context.PlayerRegistrations.ToListAsync();
